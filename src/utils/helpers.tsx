@@ -1,13 +1,11 @@
-import { Typography } from "@mui/material";
-import reactStringReplace from 'react-string-replace';
-import { theme } from "styles/MUI_theme";
-
 function getFormedText(note: string) {
-  return (
-    reactStringReplace(note, /#(\w+)/g, (match, i) => 
-      (<Typography component={'span'} sx={{color: 'blue'}} key={i}>#{match} </Typography>)
-    )
-  )
+  const arr= note.split(' ').map((item)=> item.match(/#[a-z0-9_]+/g) ? `<span class="hashTag">${item}</span>` : item).join(' ');
+  return arr
 }
 
-export {getFormedText};
+function getHashTags(note: string) {
+  const res: string[]=[];
+  note.split(' ').forEach((item)=> {if(item.match(/#[a-z0-9_]+/g))res.push(item)});
+  return res.join(' ');
+}
+export {getFormedText, getHashTags};

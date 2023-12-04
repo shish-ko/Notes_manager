@@ -1,45 +1,35 @@
-import { Box, Dialog, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { getFormedText } from "~utils/helpers";
+import { getFormedText, getHashTags } from "~utils/helpers";
+import ContentEditable from 'react-contenteditable';
 import { theme } from "styles/MUI_theme";
 
 interface IAddNoteFormProps {
   isOpen: boolean;
   closeHandler: () => void
 }
-
-const textareaStyle: React.CSSProperties = {
+const inputStyle: React.CSSProperties ={
   ...theme.typography.subtitle1,
-  width: '100%',
-  resize: 'none',
-  zIndex: 1,
-  backgroundColor: 'transparent',
-  position: 'absolute',
-  caretColor: 'black',
-  color: 'red',
-  // top: 0, 
-  // left: 0, 
-  // right: 0, 
-  // bottom: 0
-  // overflow: 'hidden'
-  maxLines: '30'
+  border: '1px solid black',
+  padding: theme.spacing(1),
+  width: '100%'
 }
+
 export const AddNoteForm: React.FC<IAddNoteFormProps> = ({ isOpen, closeHandler }) => {
   const [note, setNote] = useState('');
-  console.log(getFormedText(note))
+  const tags = getHashTags(note);
   return (
     <Dialog open={isOpen} onClose={closeHandler}>
       <DialogTitle>Add new note</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Print your note and chose <Typography component={'span'} sx={{ fontStyle: 'oblique' }}>share</Typography> if you want to create a post on FaceBook
+        <DialogContentText mb={1}>
+          Print your note using <Typography component='span' sx={{color: theme.palette.primary.light, fontStyle:"italic"}}>#hashtags</Typography> to make it easier to find relative notes later.
         </DialogContentText>
-        {/* <Box position={'relative'}> */}
-          <div style={{ overflowX: 'hidden', overflowY: 'scroll', wordBreak: 'break-word',  border: '2px solid green', position: 'relative' }} >
-            <textarea style={textareaStyle} value={note} onChange={(e) => { setNote(e.target.value); }} />
-            <Typography maxWidth={'100%'} variant="subtitle1">{getFormedText(note)}</Typography>
-          </div>
-        {/* </Box> */}
+        <ContentEditable  style={inputStyle} html={getFormedText(note)} onChange={(e)=> {setNote((e.nativeEvent.target as HTMLElement).innerText)}}/> 
+        {tags && <Typography sx={{color: theme.palette.primary.light, width: '100%', overflow: 'hidden'}}>{tags}</Typography>} 
+        <DialogActions>
+          <Button>Create note</Button> 
+        </DialogActions>     
       </DialogContent>
     </Dialog>
   )
