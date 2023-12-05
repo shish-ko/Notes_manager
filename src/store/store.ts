@@ -21,7 +21,8 @@ const noteStore = createSlice({
       store.notes.push(payload);
     },
     removeNote: (store, { payload }: { payload: string }) => {
-      store.notes.filter((note) => note.id !== payload);
+      console.log(payload)
+      store.notes =store.notes.filter((note) => note.id !== payload);
     },
     editNote: (store, { payload }: { payload: INote }) => {
       const noteToEdit = store.notes.findIndex((note) => note.id === payload.id);

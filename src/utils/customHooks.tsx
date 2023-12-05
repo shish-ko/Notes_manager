@@ -32,6 +32,7 @@ const useNotes = () => {
     dispatch(addNote(note))
   }
   const removeStorageNote = (note: INote) => {
+    console.log(1)
     dispatch(removeNote(note.id))
   }
   const editStorageNote = (note: INote) => {
