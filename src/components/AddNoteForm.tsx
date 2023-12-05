@@ -7,6 +7,7 @@ import { useAppDispatch } from "~utils/customHooks";
 import { v4 as uuid } from 'uuid';
 import { INote } from "interfaces";
 import { addNote } from "store/store";
+import { HashtagList } from "./HashtagList";
 
 interface IAddNoteFormProps {
   isOpen: boolean;
@@ -18,10 +19,10 @@ const inputStyle: React.CSSProperties = {
   padding: theme.spacing(1),
   width: '100%'
 }
-const getNewNote = () => ({
+const getNewNote = (): INote => ({
   id: uuid(),
   description: '',
-  hashTags: ''
+  hashTags: []
 })
 export const AddNoteForm: React.FC<IAddNoteFormProps> = ({ isOpen, closeHandler }) => {
   const [note, setNote] = useState<INote>(getNewNote());
@@ -31,10 +32,10 @@ export const AddNoteForm: React.FC<IAddNoteFormProps> = ({ isOpen, closeHandler 
     const text = (e.nativeEvent.target as HTMLElement).innerText;
     setNote({ ...note, description: text, hashTags: getHashTags(text) })
   };
-  const addHandler = () => { 
-    dispatch(addNote(note)); 
+  const addHandler = () => {
+    dispatch(addNote(note));
     setNote(getNewNote());
-    closeHandler(); 
+    closeHandler();
   };
 
   return (
@@ -45,7 +46,7 @@ export const AddNoteForm: React.FC<IAddNoteFormProps> = ({ isOpen, closeHandler 
           Print your note using <Typography component='span' sx={{ color: theme.palette.primary.light, fontStyle: "italic" }}>#hashtags</Typography> to make it easier to find relative notes later.
         </DialogContentText>
         <ContentEditable style={inputStyle} html={getFormedText(note.description)} onChange={changeHandler} />
-        {note.hashTags && <Typography sx={{ color: theme.palette.primary.light, width: '100%', overflow: 'hidden' }}>{note.hashTags}</Typography>}
+        {note.hashTags && <HashtagList hashTags={note.hashTags} />}
         <DialogActions>
           <Button onClick={addHandler}>Create note</Button>
         </DialogActions>

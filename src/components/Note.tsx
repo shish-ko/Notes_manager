@@ -7,6 +7,7 @@ import { editNote, removeNote } from "store/store";
 import { theme } from "styles/MUI_theme";
 import { useAppDispatch } from "~utils/customHooks";
 import { getFormedText, getHashTags } from "~utils/helpers";
+import { HashtagList } from "./HashtagList";
 
 interface INoteProps {
   note: INote,
@@ -21,11 +22,20 @@ export const Note: React.FC<INoteProps> = ({ note }) => {
   const dispatch = useAppDispatch();
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedNote, setEditedNote] = useState<INote>(note);
-  
+
   const changeHandler = (e: ContentEditableEvent) => {
     const text = (e.nativeEvent.target as HTMLElement).innerText;
-    setEditedNote({ ...note, description: text, hashTags: getHashTags(text) })
+    setEditedNote({ ...note, description: text, hashTags: getHashTags(text) });
   };
+  const saveEditHandler = () => {
+    dispatch(editNote(editedNote));
+    setIsEditMode(!isEditMode);
+  };
+  const editModeHandler = () => {
+    setIsEditMode(!isEditMode);
+    setEditedNote(note);
+  };
+
   return (
     <Paper elevation={10} sx={{ width: '30%' }}>
       <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -33,17 +43,17 @@ export const Note: React.FC<INoteProps> = ({ note }) => {
           {isEditMode ?
             <>
               <ContentEditable html={getFormedText(editedNote.description)} onChange={changeHandler} style={editableDivStyle} />
-              <Typography color={theme.palette.primary.light}>{editedNote.hashTags}</Typography>
+              <HashtagList hashTags={editedNote.hashTags} />
             </> :
             <>
               <Typography>{note.description}</Typography>
-              <Typography color={theme.palette.primary.light}>{note.hashTags}</Typography>
+              <HashtagList hashTags={note.hashTags} />
             </>}
         </CardContent>
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button color="error" onClick={() => { dispatch(removeNote(note.id)) }}>Delete</Button>
-          {isEditMode && <Button color="success" onClick={() => { dispatch(editNote(editedNote)); setIsEditMode(!isEditMode) }}>Save</Button>}
-          <Button onClick={() => { setIsEditMode(!isEditMode); setEditedNote(note) }}>{isEditMode ? 'Cancel' : 'Edit'}</Button>
+          {isEditMode && <Button color="success" onClick={saveEditHandler}>Save</Button>}
+          <Button onClick={editModeHandler}>{isEditMode ? 'Cancel' : 'Edit'}</Button>
         </CardActions>
       </Card>
     </Paper>

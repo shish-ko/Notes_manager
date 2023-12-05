@@ -3,11 +3,11 @@ import { INote } from 'interfaces';
 
 interface IInitialState {
   notes: INote[],
-  searchHashtags: string
+  searchHashtags: string[]
 }
 const initialState: IInitialState = {
   notes: [],
-  searchHashtags: ''
+  searchHashtags: []
 }
 
 const noteStore = createSlice({
@@ -27,6 +27,12 @@ const noteStore = createSlice({
     editNote: (store, { payload }: { payload: INote }) => {
       const noteToEdit = store.notes.findIndex((note) => note.id === payload.id);
       store.notes.splice(noteToEdit, 1, payload);
+    },
+    searchByHashtag: (store, {payload}: {payload: string}) => {
+      store.searchHashtags.push(payload);
+    },
+    resetSearch: (store) => {
+      store.searchHashtags=[];
     }
   }
 });
@@ -38,4 +44,4 @@ export const store = configureStore({
 });
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-export const { addNote, addNotes, removeNote, editNote } = noteStore.actions;
+export const { addNote, addNotes, removeNote, editNote, searchByHashtag, resetSearch } = noteStore.actions;
