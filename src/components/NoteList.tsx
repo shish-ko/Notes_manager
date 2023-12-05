@@ -1,4 +1,4 @@
-import { Fab, Stack } from "@mui/material";
+import { Fab, Stack, Typography } from "@mui/material";
 import { INote } from "interfaces";
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";
@@ -20,17 +20,19 @@ export const NoteList: React.FC<INoteListProps> = () => {
   }, [notes])
   return (
     <>
-      <Stack direction={'row'} gap={'5%'} flexWrap={'wrap'} rowGap={theme.spacing(4)}>
-        {searchHashtags.length ? 
-          getMatchedNotes(notes, searchHashtags).map((note) => <Note note={note} key={note.id} />) :
-          notes.map((note) => <Note note={note} key={note.id} />) 
-        }
-      </Stack>
+      {notes.length ?
+        <Stack direction={'row'} gap={'5%'} flexWrap={'wrap'} rowGap={theme.spacing(4)}>
+          {searchHashtags.length ?
+            getMatchedNotes(notes, searchHashtags).map((note) => <Note note={note} key={note.id} />) :
+            notes.map((note) => <Note note={note} key={note.id} />)
+          }
+        </Stack> :
+        <Typography variant="h4">Press add button to fill note form</Typography>
+      }
       <Fab color="primary" sx={{ position: 'fixed', bottom: '140px', right: '140px' }} onClick={() => { setIsAddActive(!isAddActive) }}>
         <AddIcon />
       </Fab>
       <AddNoteForm isOpen={isAddActive} closeHandler={() => { setIsAddActive(false) }} />
-
     </>
   )
 }

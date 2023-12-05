@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material";
-import { blue, green, purple } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 
 export const theme = createTheme({
   palette: {
@@ -14,7 +14,9 @@ export const theme = createTheme({
   typography: {
     h1: {
       fontSize: '3rem',
-      textTransform: 'capitalize',
+      textTransform: 'uppercase',
+      fontFamily: 'Alfa Slab One, serif',
+      color: blue[100]
     }
   }
 });

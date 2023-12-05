@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
     <Box sx={{pt: 2, pb: 2, color: 'white'}} bgcolor={palette.primary.main}>
       <Container> 
         <Stack direction={'row'} justifyContent={'space-between'}>
-          <Typography variant="h1">Super-mega-note-manager</Typography>
+          <Typography variant="h1">not-another-note-manager &#41;</Typography>
           <Button disabled={!searchHashtags.length} variant={'contained'} color="secondary" size="small" onClick={()=> {dispatch(resetSearch())}}> Reset filters</Button>
         </Stack>
         
