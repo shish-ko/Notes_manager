@@ -15,7 +15,6 @@ export const theme = createTheme({
     h1: {
       fontSize: '3rem',
       textTransform: 'capitalize',
-      // fontFamily: 'Roboto',
     }
   }
 });
