@@ -10,9 +10,9 @@ export const Main: React.FC = () => {
     <Container>
       {
         store ?
-      <CircularProgress /> :
-      <NoteList />
+          <NoteList /> :
+          <CircularProgress />
       }
-    </Container>    
+    </Container>
   )
 }

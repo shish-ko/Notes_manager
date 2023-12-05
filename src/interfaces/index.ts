@@ -1,7 +1,6 @@
 interface INote {
   id: string,
   description: string,
-  isDone: boolean,
   hashTags: string,
 }
 

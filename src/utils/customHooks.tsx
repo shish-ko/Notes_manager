@@ -1,25 +1,43 @@
 import { INote } from "interfaces";
 import { useEffect, useState } from "react";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState, addNote, addNotes, editNote, removeNote } from "store/store";
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const useFakeLoader = () => {
   const [res, setRes] = useState(false);
-  setTimeout(() => { setRes(true) }, 2000)
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const storageNotes = localStorage.getItem('notes')
+    if (!storageNotes) {
+      localStorage.setItem('notes', '[]');
+    } else {
+      dispatch(addNotes(JSON.parse(storageNotes)));
+    }
+    setTimeout(() => { setRes(true) }, 2000);
+  },[])
   return res
 }
 
 const useNotes = () => {
-  const [notes, setNotes] = useState<INote[]>();
+  const {notes} = useAppSelector((store) => store.noteStore);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    if (!localStorage.getItem('notes')) {
-      localStorage.setItem('notes', '[]');
-      setNotes([]);
-      
-    }
-
-  },[notes])
-
-  const note = JSON.parse(localStorage.getItem('notes') || '') as INote[];
-  return { notes, addNote, removeNote }
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes])
+  const addStorageNote = (note: INote) => {
+    dispatch(addNote(note))
+  }
+  const removeStorageNote = (note: INote) => {
+    dispatch(removeNote(note.id))
+  }
+  const editStorageNote = (note: INote) => {
+    dispatch(editNote(note));
+  }
+  return { notes, addStorageNote, removeStorageNote, editStorageNote }
 }
 
 export { useFakeLoader, useNotes };
